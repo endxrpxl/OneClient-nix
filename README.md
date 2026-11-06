@@ -16,7 +16,7 @@ Run it once:
 nix run github:endxrpxl/OneClient-nix
 ```
 
-Install on NixOS through the overlay:
+Install on NixOS:
 
 ```nix
 {
@@ -24,10 +24,15 @@ Install on NixOS through the overlay:
   inputs.oneclient.inputs.nixpkgs.follows = "nixpkgs";
 
   # in a module
-  nixpkgs.overlays = [ inputs.oneclient.overlays.default ];
-  environment.systemPackages = [ pkgs.oneclient ];
+  environment.systemPackages = [
+    inputs.oneclient.packages.${pkgs.stdenv.hostPlatform.system}.default
+  ];
 }
 ```
+
+`follows` builds it against your system's nixpkgs.
+If you want your own overlays and `nixpkgs.config` to apply to its dependencies,
+use `nixpkgs.overlays = [ inputs.oneclient.overlays.default ];` and `pkgs.oneclient` instead.
 
 ## What the wrapper does
 
@@ -45,7 +50,7 @@ Install on NixOS through the overlay:
 Pick different JDKs:
 
 ```nix
-pkgs.oneclient.override { jdks = [ pkgs.jdk21 pkgs.jdk25 ]; }
+inputs.oneclient.packages.${pkgs.stdenv.hostPlatform.system}.default.override { jdks = [ pkgs.jdk21 pkgs.jdk25 ]; }
 ```
 
 ## Updating
