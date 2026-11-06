@@ -18,21 +18,20 @@ nix run github:endxrpxl/OneClient-nix
 
 Install on NixOS:
 
-```nix
-{
-  inputs.oneclient.url = "github:endxrpxl/OneClient-nix";
-  inputs.oneclient.inputs.nixpkgs.follows = "nixpkgs";
+In your flake inputs add:
 
-  # in a module
-  environment.systemPackages = [
-    inputs.oneclient.packages.${pkgs.stdenv.hostPlatform.system}.default
-  ];
-}
+```nix
+oneclient = {
+  url = "github:endxrpxl/OneClient-nix";
+  inputs.nixpkgs.follows = "nixpkgs";
+};
 ```
 
-`follows` builds it against your system's nixpkgs.
-If you want your own overlays and `nixpkgs.config` to apply to its dependencies,
-use `nixpkgs.overlays = [ inputs.oneclient.overlays.default ];` and `pkgs.oneclient` instead.
+And in your systemPackages:
+
+```nix
+inputs.oneclient.packages.${pkgs.stdenv.hostPlatform.system}.default
+```
 
 ## What the wrapper does
 
