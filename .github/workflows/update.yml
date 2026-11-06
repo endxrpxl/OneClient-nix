@@ -1,0 +1,43 @@
+name: update
+
+on:
+  schedule:
+    - cron: "0 4 * * 1"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: DeterminateSystems/nix-installer-action@v16
+      - name: Bump version
+        id: bump
+        run: |
+          old=$(nix eval --raw .#default.version)
+          nix run nixpkgs#nix-update -- --flake oneclient --version-regex 'oneclient-(.*)'
+          new=$(nix eval --raw .#default.version)
+          echo "old=$old" >> "$GITHUB_OUTPUT"
+          echo "new=$new" >> "$GITHUB_OUTPUT"
+      - name: Build
+        if: steps.bump.outputs.old != steps.bump.outputs.new
+        id: build
+        continue-on-error: true
+        run: nix build .#default -L
+      - uses: peter-evans/create-pull-request@v7
+        if: steps.bump.outputs.old != steps.bump.outputs.new
+        with:
+          branch: update/oneclient
+          title: "oneclient: ${{ steps.bump.outputs.old }} -> ${{ steps.bump.outputs.new }}"
+          commit-message: "oneclient: ${{ steps.bump.outputs.old }} -> ${{ steps.bump.outputs.new }}"
+          body: |
+            Automated bump by nix-update.
+
+            Build: ${{ steps.build.outcome }}
+
+            If the build failed in freya-skia-bindings, the Skia tag, key and hash
+            in package.nix need a manual update. See the README.
