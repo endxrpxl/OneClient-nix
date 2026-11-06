@@ -1,4 +1,4 @@
-# OneLauncher-nix
+# OneClient-nix
 
 Nix flake for [OneClient](https://polyfrost.org/projects/oneclient), the Minecraft launcher from Polyfrost's
 [OneLauncher](https://github.com/Polyfrost/OneLauncher) monorepo. Built from source for x86_64-linux.
@@ -13,14 +13,14 @@ The packaging was written by AI.
 Run it once:
 
 ```sh
-nix run github:<owner>/OneLauncher-nix
+nix run github:endxrpxl/OneClient-nix
 ```
 
 Install on NixOS through the overlay:
 
 ```nix
 {
-  inputs.oneclient.url = "github:<owner>/OneLauncher-nix";
+  inputs.oneclient.url = "github:endxrpxl/OneClient-nix";
   inputs.oneclient.inputs.nixpkgs.follows = "nixpkgs";
 
   # in a module
