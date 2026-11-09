@@ -105,16 +105,16 @@ let
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "oneclient";
-  version = "2.9.0";
+  version = "2.10.0";
 
   src = fetchFromGitHub {
     owner = "Polyfrost";
     repo = "OneLauncher";
     tag = "oneclient-${finalAttrs.version}";
-    hash = "sha256-pIAnp5D4zQz2+JvdS9Bd3x+0TL5iTtH17u60QRL2BUE=";
+    hash = "sha256-jROODkui3F9oFTHVyhWJWze/2FCPM61CU48ZLLK59CU=";
   };
 
-  cargoHash = "sha256-Tuk7g/6Ip++LZRgWWnhXIWvby6NRPgvbXqEohTO8h2k=";
+  cargoHash = "sha256-tJAjsdQRDjicXrKyaC3BgJuH1K9ILSvvKER/Bi2MKZ0=";
 
   cargoBuildFlags = [
     "-p"
