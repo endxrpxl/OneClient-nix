@@ -7,9 +7,11 @@
   pkg-config,
   makeWrapper,
   addDriverRunpath,
+  aws-lc,
   fontconfig,
   freetype,
   gtk3,
+  sqlite,
   libayatana-appindicator,
   libGL,
   libxkbcommon,
@@ -91,11 +93,11 @@ let
   # freya-skia-bindings downloads this at build time. The tag is the bindings
   # crate version in Cargo.lock; the key is printed by its build script as
   # "TRYING TO DOWNLOAD AND INSTALL SKIA BINARIES: <tag>/<key>".
-  skiaTag = "0.103.2";
-  skiaKey = "54a7d172bc995dfdc3e7-x86_64-unknown-linux-gnu-egl-ganesh-gl-jpegd-jpege-svg-textlayout-vulkan-wayland-webpd-webpe-x11";
+  skiaTag = "0.104.0";
+  skiaKey = "746613b43b596b9d2114-x86_64-unknown-linux-gnu-egl-ganesh-gl-jpegd-jpege-svg-textlayout-vulkan-wayland-webpd-webpe-x11";
   skiaBinaries = fetchurl {
     url = "https://github.com/marc2332/rust-skia/releases/download/${skiaTag}/skia-binaries-${skiaKey}.tar.gz";
-    hash = "sha256-8HifMlB8eKptId0L9UFpsw8AD0rlVtBGXwu2KxY604U=";
+    hash = "sha256-3BJEhkPhqH6QOloL8UL3cueOS3g/56q8Xnn9sFD3wDw=";
   };
 
   gamePrograms = [
@@ -105,16 +107,16 @@ let
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "oneclient";
-  version = "2.9.0";
+  version = "2.10.0";
 
   src = fetchFromGitHub {
     owner = "Polyfrost";
     repo = "OneLauncher";
     tag = "oneclient-${finalAttrs.version}";
-    hash = "sha256-pIAnp5D4zQz2+JvdS9Bd3x+0TL5iTtH17u60QRL2BUE=";
+    hash = "sha256-jROODkui3F9oFTHVyhWJWze/2FCPM61CU48ZLLK59CU=";
   };
 
-  cargoHash = "sha256-Tuk7g/6Ip++LZRgWWnhXIWvby6NRPgvbXqEohTO8h2k=";
+  cargoHash = "sha256-tJAjsdQRDjicXrKyaC3BgJuH1K9ILSvvKER/Bi2MKZ0=";
 
   cargoBuildFlags = [
     "-p"
@@ -128,9 +130,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ];
 
   buildInputs = [
+    aws-lc
     fontconfig
     freetype
     gtk3
+    sqlite
   ]
   ++ appLibs;
 
